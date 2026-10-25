@@ -14,8 +14,42 @@ def gini(y):
     p = np.array(np.unique(y, return_counts=True)[1])/np.size(y)
     return 1-np.sum(p**2)
 
-# Step 2 - best_split (not yet solved)
-# TODO: implement
+# Step 2 - best_split
+def best_split(X, y):
+    best_gain = 0.0
+    best_threshold = None
+    best_feature = None
+
+    gini_parent = gini(y)
+    n = len(y)
+
+    for j in range(X.shape[1]):
+        vals = np.unique(X[:, j])
+        thresholds = (vals[:-1] + vals[1:]) / 2
+
+        for threshold in thresholds:
+            left_mask = X[:, j] <= threshold
+            right_mask = X[:, j] > threshold
+
+            y_left = y[left_mask]
+            y_right = y[right_mask]
+
+            if len(y_left) == 0 or len(y_right) == 0:
+                continue
+
+            weighted_gini = (
+                len(y_left) / n * gini(y_left)
+                + len(y_right) / n * gini(y_right)
+            )
+
+            gain = gini_parent - weighted_gini
+
+            if gain > best_gain:
+                best_gain = float(gain)
+                best_feature = j
+                best_threshold = float(threshold)
+
+    return best_feature, best_threshold, best_gain
 
 # Step 3 - grow_tree (not yet solved)
 # TODO: implement
