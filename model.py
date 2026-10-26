@@ -51,8 +51,71 @@ def best_split(X, y):
 
     return best_feature, best_threshold, best_gain
 
-# Step 3 - grow_tree (not yet solved)
-# TODO: implement
+# Step 3 - grow_tree
+import numpy as np
+
+
+def grow_tree(X, y, max_depth=2, min_samples_leaf=1, depth=0):
+    n = len(y)
+    
+    # Determine majority class with tie-breaking (smallest class index on ties)
+    classes, counts = np.unique(y, return_counts=True)
+    sorted_indices = np.lexsort((classes, -counts))
+    majority_class = int(classes[sorted_indices[0]])
+    
+    # Stop if node is pure or max_depth is reached
+    if len(classes) == 1 or depth >= max_depth:
+        return {"leaf": True, "value": majority_class, "n": int(n)}
+        
+    # Search for the best split with positive gain and min_samples_leaf constraint
+    best_gain = 0.0
+    best_j = None
+    best_t = None
+    
+    current_gini = gini(y)
+    n_features = X.shape[1]
+    
+    for j in range(n_features):
+        vals = np.unique(X[:, j])
+        thresholds = (vals[:-1] + vals[1:]) / 2
+        for t in thresholds:
+            left_mask = X[:, j] <= t
+            right_mask = ~left_mask
+            
+            n_left = np.sum(left_mask)
+            n_right = np.sum(right_mask)
+            
+            # Ensure both child nodes satisfy min_samples_leaf
+            if n_left < min_samples_leaf or n_right < min_samples_leaf:
+                continue
+                
+            weighted_gini = (n_left / n) * gini(y[left_mask]) + (n_right / n) * gini(y[right_mask])
+            gain = current_gini - weighted_gini
+            
+            if gain > best_gain:
+                best_gain = gain
+                best_j = j
+                best_t = t
+                
+    # Stop if no valid split with positive gain exists
+    if best_j is None:
+        return {"leaf": True, "value": majority_class, "n": int(n)}
+        
+    # Recurse for left and right subtrees
+    left_mask = X[:, best_j] <= best_t
+    right_mask = ~left_mask
+    
+    left_subtree = grow_tree(X[left_mask], y[left_mask], max_depth, min_samples_leaf, depth + 1)
+    right_subtree = grow_tree(X[right_mask], y[right_mask], max_depth, min_samples_leaf, depth + 1)
+    
+    return {
+        "leaf": False,
+        "feature": int(best_j),
+        "threshold": float(best_t),
+        "n": int(n),
+        "left": left_subtree,
+        "right": right_subtree
+    }
 
 # Step 4 - predict_tree (not yet solved)
 # TODO: implement
