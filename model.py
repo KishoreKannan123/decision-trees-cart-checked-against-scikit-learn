@@ -117,8 +117,22 @@ def grow_tree(X, y, max_depth=2, min_samples_leaf=1, depth=0):
         "right": right_subtree
     }
 
-# Step 4 - predict_tree (not yet solved)
-# TODO: implement
+# Step 4 - predict_tree
+def predict_tree(tree, X):
+    # TODO: walk the dict tree per row; return an int array of leaf values.
+    result = []
+    original_tree = tree
+    for i in range(X.shape[0]):
+        tree = original_tree
+        while(not tree['leaf']):
+            if(X[i,tree['feature']]<=tree['threshold']):
+                tree = tree['left']
+            else:
+                tree = tree['right']
+            
+        result.append(tree['value'])
+    
+    return np.array(result)
 
 # Step 5 - fit_sklearn_tree (not yet solved)
 # TODO: implement
