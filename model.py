@@ -178,8 +178,13 @@ def compare_trees(X, y, max_depth=2):
 
     return {'same_splits':my_splits==theirs,'agreement':agreement,'my_splits':my_splits}
 
-# Step 8 - moons_data (not yet solved)
-# TODO: implement
+# Step 8 - moons_data
+from sklearn.datasets import make_moons
+from sklearn.model_selection import train_test_split
+def moons_data(n_samples=300, noise=0.25, random_state=42, test_size=0.3):
+    # TODO: make_moons + train_test_split; return (X_train, X_test, y_train, y_test).
+    X,y = make_moons(n_samples, noise=noise, random_state=random_state)
+    return train_test_split(X, y, test_size=test_size, random_state=random_state)
 
 # Step 9 - overfit_vs_regularized (not yet solved)
 # TODO: implement
