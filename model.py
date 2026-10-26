@@ -134,8 +134,15 @@ def predict_tree(tree, X):
     
     return np.array(result)
 
-# Step 5 - fit_sklearn_tree (not yet solved)
-# TODO: implement
+# Step 5 - fit_sklearn_tree
+from sklearn.tree import DecisionTreeClassifier
+
+def fit_sklearn_tree(X, y, max_depth=2, min_samples_leaf=1, random_state=42):
+    # TODO: fit and return DecisionTreeClassifier(max_depth, min_samples_leaf, random_state).
+    clf = DecisionTreeClassifier(max_depth = max_depth,min_samples_leaf = min_samples_leaf,random_state = random_state)
+    clf.fit(X,y)
+
+    return clf
 
 # Step 6 - sklearn_splits (not yet solved)
 # TODO: implement
