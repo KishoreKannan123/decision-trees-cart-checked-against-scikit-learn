@@ -201,8 +201,19 @@ def overfit_vs_regularized(X_train, X_test, y_train, y_test, min_samples_leaf=5)
 
     return {'free':{'train_acc':accuracy_score(train_pred_free,y_train),'test_acc':accuracy_score(test_pred_free,y_test),'leaves':free.get_n_leaves()},'regularized':{'train_acc':accuracy_score(train_pred_reg,y_train),'test_acc':accuracy_score(test_pred_reg,y_test),'leaves':regularized.get_n_leaves()}}
 
-# Step 10 - rotation_sensitivity (not yet solved)
-# TODO: implement
+# Step 10 - rotation_sensitivity
+def rotation_sensitivity(X_train, X_test, y_train, y_test, degrees=45.0, min_samples_leaf=5):
+    # TODO: rotate the features, refit, compare test accuracies; return original_acc, rotated_acc, drop.
+    theta = degrees*np.pi/180
+    rotation_matrix = np.array([[np.cos(theta), -np.sin(theta)],
+              [np.sin(theta),  np.cos(theta)]])
+
+    orig_clf = fit_sklearn_tree(X_train,y_train,max_depth = None,min_samples_leaf = min_samples_leaf)
+    rotate_clf = fit_sklearn_tree(X_train@(rotation_matrix.T),y_train,max_depth = None,min_samples_leaf = min_samples_leaf)
+
+    orig_acc = accuracy_score(y_test,orig_clf.predict(X_test))
+    rotate_acc = accuracy_score(y_test,rotate_clf.predict(X_test@(rotation_matrix.T)))
+    return {'original_acc':orig_acc,'rotated_acc':rotate_acc,'drop':round(orig_acc-rotate_acc,4)}
 
 # Step 11 - regression_tree (not yet solved)
 # TODO: implement
