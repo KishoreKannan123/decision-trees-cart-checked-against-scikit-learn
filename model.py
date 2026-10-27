@@ -224,8 +224,11 @@ def regression_tree(X, y, max_depth=2, random_state=42):
     predictions = clf.predict(X)
     return {'model':clf,'n_distinct_predictions':np.unique(predictions).size,'train_mse':np.mean(np.square(y-predictions))}
 
-# Step 12 - tree_rules (not yet solved)
-# TODO: implement
+# Step 12 - tree_rules
+from sklearn.tree import export_text
+def tree_rules(clf, feature_names):
+    # TODO: sklearn.tree.export_text with the given feature names.
+    return export_text(clf, feature_names=list(feature_names))
 
 # Step 13 - save_and_reload_tree (not yet solved)
 # TODO: implement
