@@ -230,8 +230,12 @@ def tree_rules(clf, feature_names):
     # TODO: sklearn.tree.export_text with the given feature names.
     return export_text(clf, feature_names=list(feature_names))
 
-# Step 13 - save_and_reload_tree (not yet solved)
-# TODO: implement
+# Step 13 - save_and_reload_tree
+import joblib
+def save_and_reload_tree(clf, path):
+    # TODO: joblib.dump then joblib.load; return the reloaded model.
+    joblib.dump(clf, path)
+    return joblib.load(path)
 
 # Step 14 - predict_species (not yet solved)
 # TODO: implement
