@@ -215,8 +215,14 @@ def rotation_sensitivity(X_train, X_test, y_train, y_test, degrees=45.0, min_sam
     rotate_acc = accuracy_score(y_test,rotate_clf.predict(X_test@(rotation_matrix.T)))
     return {'original_acc':orig_acc,'rotated_acc':rotate_acc,'drop':round(orig_acc-rotate_acc,4)}
 
-# Step 11 - regression_tree (not yet solved)
-# TODO: implement
+# Step 11 - regression_tree
+from sklearn.tree import DecisionTreeRegressor
+def regression_tree(X, y, max_depth=2, random_state=42):
+    # TODO: fit DecisionTreeRegressor; return model, n_distinct_predictions, train_mse.
+    clf = DecisionTreeRegressor(max_depth = max_depth,random_state = random_state)
+    clf.fit(X,y)
+    predictions = clf.predict(X)
+    return {'model':clf,'n_distinct_predictions':np.unique(predictions).size,'train_mse':np.mean(np.square(y-predictions))}
 
 # Step 12 - tree_rules (not yet solved)
 # TODO: implement
